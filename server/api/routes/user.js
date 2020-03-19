@@ -23,11 +23,12 @@ userRouter.post('/', async (ctx) => {
 
 // Get user by name
 userRouter.get('/:name', async (ctx) => {
-  const { name, bio, email, icon } = ctx.request.body
-  await addUser(name, bio, email, icon)
-    .then((name) => {
+  console.log(ctx.params.name)
+  const { name } = ctx.params
+  await getUser(name)
+    .then((user) => {
       console.log('Successfully got user');
-      ctx.body = name;
+      ctx.body = user;
     })
     .catch((err) => {
       console.error(err);
