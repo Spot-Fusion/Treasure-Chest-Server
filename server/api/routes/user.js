@@ -10,8 +10,7 @@ const userRouter = new Router({ prefix: '/user' });
 userRouter.post('/', async (ctx) => {
   const { name, bio, email, icon } = ctx.request.body
   await addUser(name, bio, email, icon)
-    .then((a) => {
-      console.log(a);
+    .then(() => {;
       ctx.body = 'Successfully added user';
     })
     .catch((err) => {

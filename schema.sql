@@ -8,13 +8,13 @@ BEGIN
   END LOOP;
 END $$;
 
-CREATE TABLE "user" (
+CREATE TABLE "account" (
 	"id" serial NOT NULL,
 	"name" varchar(50) NOT NULL UNIQUE,
 	"bio" varchar(255),
 	"email" varchar(120) NOT NULL,
 	"icon" varchar(255) NOT NULL,
-	CONSTRAINT "user_pk" PRIMARY KEY ("id")
+	CONSTRAINT "account_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -23,7 +23,7 @@ CREATE TABLE "listing" (
 	"id_seller" integer NOT NULL,
 	"id" serial NOT NULL,
 	"id_category" integer NOT NULL,
-	"created_at" TIMESTAMP NOT NULL,
+	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"name" varchar(50) NOT NULL,
 	"description" varchar(255) NOT NULL,
 	"price" FLOAT NOT NULL,
@@ -92,14 +92,14 @@ CREATE TABLE "tag" (
   OIDS=FALSE
 );
 
-ALTER TABLE "listing" ADD CONSTRAINT "listing_fk0" FOREIGN KEY ("id_seller") REFERENCES "user"("id");
+ALTER TABLE "listing" ADD CONSTRAINT "listing_fk0" FOREIGN KEY ("id_seller") REFERENCES "account"("id");
 ALTER TABLE "listing" ADD CONSTRAINT "listing_fk1" FOREIGN KEY ("id_category") REFERENCES "category"("id");
 
-ALTER TABLE "message" ADD CONSTRAINT "message_fk0" FOREIGN KEY ("id_sender") REFERENCES "user"("id");
-ALTER TABLE "message" ADD CONSTRAINT "message_fk1" FOREIGN KEY ("id_recipient") REFERENCES "user"("id");
+ALTER TABLE "message" ADD CONSTRAINT "message_fk0" FOREIGN KEY ("id_sender") REFERENCES "account"("id");
+ALTER TABLE "message" ADD CONSTRAINT "message_fk1" FOREIGN KEY ("id_recipient") REFERENCES "account"("id");
 
-ALTER TABLE "selection" ADD CONSTRAINT "selection_fk0" FOREIGN KEY ("id_user") REFERENCES "user"("id");
-ALTER TABLE "selection" ADD CONSTRAINT "selection_fk1" FOREIGN KEY ("id_following") REFERENCES "user"("id");
+ALTER TABLE "selection" ADD CONSTRAINT "selection_fk0" FOREIGN KEY ("id_user") REFERENCES "account"("id");
+ALTER TABLE "selection" ADD CONSTRAINT "selection_fk1" FOREIGN KEY ("id_following") REFERENCES "account"("id");
 ALTER TABLE "selection" ADD CONSTRAINT "selection_fk2" FOREIGN KEY ("id_listing") REFERENCES "listing"("id");
 ALTER TABLE "selection" ADD CONSTRAINT "selection_fk3" FOREIGN KEY ("id_tag") REFERENCES "tag"("id");
 
@@ -108,3 +108,6 @@ ALTER TABLE "listing_tag" ADD CONSTRAINT "listing_tag_fk1" FOREIGN KEY ("id_list
 
 ALTER TABLE "image" ADD CONSTRAINT "image_fk0" FOREIGN KEY ("id_listing") REFERENCES "listing"("id");
 
+INSERT INTO "account" (name, bio, email, icon) VALUES('a','a','a@a.com', 'a.jpg');
+INSERT INTO "category" (name) VALUES('Shoes');
+INSERT INTO "category" (name) VALUES('Automobile');
