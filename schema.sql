@@ -108,6 +108,7 @@ ALTER TABLE "listing_tag" ADD CONSTRAINT "listing_tag_fk1" FOREIGN KEY ("id_list
 
 ALTER TABLE "image" ADD CONSTRAINT "image_fk0" FOREIGN KEY ("id_listing") REFERENCES "listing"("id");
 
-INSERT INTO "account" (name, bio, email, icon) VALUES('a','a','a@a.com', 'a.jpg');
-INSERT INTO "category" (name) VALUES('Shoes');
-INSERT INTO "category" (name) VALUES('Automobile');
+-- INSERT INTO "account" (name, bio, email, icon) VALUES('a','a','a@a.com', 'a.jpg');
+-- INSERT INTO "category" (name) VALUES('Shoes');
+-- INSERT INTO "category" (name) VALUES('Automobile');
+-- INSERT INTO "listing" (id_seller, id_category, name, description, price, zipcode, negotiable, archived) VALUES('1','1','Title', 'description', 1.1, 70091, 1, 0);
