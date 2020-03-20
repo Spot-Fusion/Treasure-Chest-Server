@@ -2,8 +2,8 @@ const Koa = require('koa');
 const cors = require('koa-cors');
 const Logger = require('koa-logger');
 const parser = require('koa-bodyparser');
-const { router } = require('./api/index');
-const { pool } = require('./db/connection.js');
+const { router } = require('./server/api/index');
+const { pool } = require('./server/db/connection');
 
 const app = new Koa();
 
@@ -30,6 +30,7 @@ pool.connect()
   });
 
 // Listen the port
-app.listen(8080, () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
   console.log('Server running on port 8080');
 });
