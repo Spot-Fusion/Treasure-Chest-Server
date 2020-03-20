@@ -2,17 +2,20 @@
   "name": "treasure-chest-server",
   "version": "1.0.0",
   "description": "Server for Treasure-Chest",
-  "main": "server.js",
+  "main": "server/index.js",
   "dependencies": {
     "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-combine-routers": "^4.0.2",
     "koa-cors": "0.0.16",
     "koa-logger": "^3.2.1",
-    "koa-router": "^8.0.8"
+    "koa-router": "^8.0.8",
+    "pg": "^7.18.2"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
