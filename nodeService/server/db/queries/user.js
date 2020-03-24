@@ -8,11 +8,11 @@ const addUser = (name, bio, email, icon) => {
   return pool.query(query, [name, bio, email, icon]);
 };
 
-const getUser = (name) => {
+const getUser = (email) => {
   const query = `
   SELECT * FROM
-  "account" WHERE name = $1 `;
-  return pool.query(query, [name])
+  "account" WHERE email = $1 `;
+  return pool.query(query, [email])
     .then((users) => users.rows[0]);
 };
 

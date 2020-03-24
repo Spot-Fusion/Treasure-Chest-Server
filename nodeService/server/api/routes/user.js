@@ -21,10 +21,10 @@ userRouter.post('/', async (ctx) => {
 });
 
 // Get user by name
-userRouter.get('/:name', async (ctx) => {
-  console.log(ctx.params.name)
-  const { name } = ctx.params
-  await getUser(name)
+userRouter.get('/:email', async (ctx) => {
+  console.log(ctx.params.email)
+  const { email } = ctx.params
+  await getUser(email)
     .then((user) => {
       console.log('Successfully got user');
       ctx.body = user;
