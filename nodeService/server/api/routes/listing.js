@@ -20,8 +20,9 @@ listingRouter.post('/', async (ctx) => {
   } = ctx.request.body
 
   await createListing(id_seller, id_category, name, description, price, zipcode, negotiable)
-    .then(() => {
-      ctx.body = 'Successfully created post';
+    .then((id) => {
+      console.log('Successfully created post');
+      ctx.body = id;
     })
     .catch((err) => {
       console.error(err);
