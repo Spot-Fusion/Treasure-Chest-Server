@@ -22,6 +22,29 @@ const getListing = (id) => {
     .then((listing) => listing.rows[0]);
 };
 
+const getListings = (category) => {
+  if (category) {
+    console.log('Category');
+    const query = `
+    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
+    FROM "listing", "account", "category"
+    WHERE category.name = $1
+    AND listing.id_seller = account.id 
+    AND listing.id_category = category.id;`;
+    return pool.query(query, [category])
+      .then((listing) => listing.rows);
+  } else {
+    console.log('No category');
+    const query = `
+    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
+    FROM "listing", "account", "category"
+    WHERE listing.id_seller = account.id 
+    AND listing.id_category = category.id;`;
+    return pool.query(query)
+      .then((listing) => listing.rows);
+  }
+};
+
 const updateListing = (name, description, price, zipcode, negotiable, id) => {
   const query = `
   UPDATE "listing"
@@ -30,9 +53,9 @@ const updateListing = (name, description, price, zipcode, negotiable, id) => {
   return pool.query(query, [name, description, price, zipcode, negotiable, id]);
 };
 
-
 module.exports = {
   createListing,
   getListing,
-  updateListing
+  getListings,
+  updateListing,
 }

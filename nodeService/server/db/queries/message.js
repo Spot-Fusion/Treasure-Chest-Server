@@ -12,12 +12,12 @@ const getUsers = (id) => {
   const query = `
   WITH m_u AS
     (
-      SELECT account.name, account.icon, message.text, id_sender, message.created_at as last_sent_at
+      SELECT account.name, account.email, account.icon, message.text, message.id_sender, message.id_recipient, message.id as id_message, message.created_at as last_sent_at
       FROM "message", "account"
       WHERE message.id_sender = $1
       AND message.id_recipient = account.id
       UNION
-      SELECT account.name, account.icon, message.text, id_sender, message.created_at as last_sent_at
+      SELECT account.name, account.email, account.icon, message.text, message.id_sender, message.id_recipient, message.id as id_message, message.created_at as last_sent_at
       FROM "message", "account"
       WHERE message.id_recipient = $1
       AND message.id_sender = account.id
@@ -33,7 +33,7 @@ const getMessages = (id_sender, id_recipient) => {
   query = `
     Select * FROM
       (
-        SELECT message.id AS id_message, account.id AS id_user, message.created_at, account.name, message.text
+        SELECT message.id AS id_message, account.id AS id_sender, message.created_at, account.name as sender, message.text
         FROM message
         INNER JOIN account
         ON account.id = message.id_sender
@@ -41,7 +41,7 @@ const getMessages = (id_sender, id_recipient) => {
         OR message.id_sender = $1 AND message.id_recipient = $2
       )
     AS all_messages
-    ORDER BY created_at DESC;`;
+    ORDER BY created_at ASC;`;
   return pool.query(query, [id_sender, id_recipient])
     .then((messages) => messages.rows);
 }
