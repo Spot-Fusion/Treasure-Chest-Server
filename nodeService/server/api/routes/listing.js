@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const {
   createListing,
   getListing,
+  getListings,
   updateListing
 } = require('../../db/queries/listing');
 
@@ -35,6 +36,20 @@ listingRouter.post('/', async (ctx) => {
 listingRouter.get('/:id', async (ctx) => {
   const { id } = ctx.params
   await getListing(id)
+    .then((post) => {
+      console.log('Successfully got post');
+      ctx.body = post;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "Post not found"
+    })
+});
+
+// Get listings by category
+listingRouter.get('/', async (ctx) => {
+  let category = ctx.request.body.category || '';
+  await getListings(category)
     .then((post) => {
       console.log('Successfully got post');
       ctx.body = post;
