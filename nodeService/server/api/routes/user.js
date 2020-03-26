@@ -1,7 +1,9 @@
 const Router = require('koa-router');
 const {
   addUser,
-  getUser
+  getUserByEmail,
+  getUserById,
+  editUser,
 } = require('../../db/queries/user');
 
 const userRouter = new Router({ prefix: '/user' });
@@ -10,8 +12,9 @@ const userRouter = new Router({ prefix: '/user' });
 userRouter.post('/', async (ctx) => {
   const { name, bio, email, icon } = ctx.request.body
   await addUser(name, bio, email, icon)
-    .then(() => {;
-      ctx.body = 'Successfully added user';
+    .then((id) => {
+      console.log('Successfully added user');
+      ctx.body = id;
     })
     .catch((err) => {
       console.error(err);
@@ -20,11 +23,11 @@ userRouter.post('/', async (ctx) => {
     })
 });
 
-// Get user by name
+// Get user by email
 userRouter.get('/:email', async (ctx) => {
   console.log(ctx.params.email)
   const { email } = ctx.params
-  await getUser(email)
+  await getUserByEmail(email)
     .then((user) => {
       console.log('Successfully got user');
       ctx.body = user;
@@ -32,6 +35,36 @@ userRouter.get('/:email', async (ctx) => {
     .catch((err) => {
       console.error(err);
       ctx.body = "User not found"
+    })
+});
+
+// Get user by id
+userRouter.get('/id/:id', async (ctx) => {
+  const { id } = ctx.params
+  await getUserById(id)
+    .then((user) => {
+      console.log('Successfully got user');
+      ctx.body = user;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "User not found"
+    })
+});
+
+// Update profile
+userRouter.patch('/update/:id', async (ctx) => {
+  const { id } = ctx.params
+  const { name, bio, icon } = ctx.request.body
+  await editUser(name, bio, icon, id)
+    .then((a) => {
+      console.log(a);
+      ctx.body = 'Successfully updated user';
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.response.status = 500
+      ctx.body = "Error updating user"
     })
 });
 
