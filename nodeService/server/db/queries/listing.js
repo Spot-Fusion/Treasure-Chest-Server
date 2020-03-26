@@ -11,6 +11,26 @@ const createListing = (seller, category, name, description, price, zipcode, nego
     .then((listing) => listing.rows[0].id);;
 };
 
+const insertImage = (id_listing, image) => {
+  const query = `
+  INSERT INTO 
+  "image" (id_listing, image)
+  VALUES ($1, $2)
+  RETURNING id;`;
+
+  return pool.query(query, [id_listing, image])
+    .then((listing) => listing.rows[0].id);
+}
+
+const getImages = (id_listing) => {
+  const query = `
+  SELECT * FROM
+  "image" WHERE
+  id_listing = $1;`;
+  return pool.query(query, [id_listing])
+    .then((listing) => listing.rows);
+}
+
 const getListing = (id) => {
   const query = `
   SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
@@ -56,6 +76,8 @@ const updateListing = (name, description, price, zipcode, negotiable, id) => {
 module.exports = {
   createListing,
   getListing,
+  insertImage,
+  getImages,
   getListings,
   updateListing,
 }

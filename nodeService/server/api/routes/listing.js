@@ -2,8 +2,10 @@ const Router = require('koa-router');
 const {
   createListing,
   getListing,
+  getImages,
+  insertImage,
   getListings,
-  updateListing
+  updateListing,
 } = require('../../db/queries/listing');
 
 const listingRouter = new Router({ prefix: '/listing' });
@@ -32,6 +34,23 @@ listingRouter.post('/', async (ctx) => {
     })
 });
 
+// Insert image
+listingRouter.post('/images', async (ctx) => {
+  const { 
+    id_listing,
+    image,
+   } = ctx.body
+  await getListings(id_listing, image)
+    .then((images) => {
+      console.log('Successfully got images');
+      ctx.body = images;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "No images found"
+    })
+});
+
 // Get listing by id
 listingRouter.get('/:id', async (ctx) => {
   const { id } = ctx.params
@@ -46,17 +65,45 @@ listingRouter.get('/:id', async (ctx) => {
     })
 });
 
+// Get images by id
+listingRouter.get('/:id/images', async (ctx) => {
+  const { id } = ctx.params
+  await getListings(id)
+    .then((images) => {
+      console.log('Successfully got images');
+      ctx.body = images;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "No images found"
+    })
+});
+
+
+listingRouter.get('/:id/images', async (ctx) => {
+  const { id } = ctx.params
+  await getListings(id)
+    .then((images) => {
+      console.log('Successfully got images');
+      ctx.body = images;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "No images found"
+    })
+});
+
 // Get listings by category
 listingRouter.get('/', async (ctx) => {
   let category = ctx.request.body.category || '';
   await getListings(category)
-    .then((post) => {
-      console.log('Successfully got post');
-      ctx.body = post;
+    .then((posts) => {
+      console.log('Successfully got posts');
+      ctx.body = posts;
     })
     .catch((err) => {
       console.error(err);
-      ctx.body = "Post not found"
+      ctx.body = "Posts not found"
     })
 });
 
