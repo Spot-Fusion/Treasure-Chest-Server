@@ -73,6 +73,13 @@ const updateListing = (name, description, price, zipcode, negotiable, id) => {
   return pool.query(query, [name, description, price, zipcode, negotiable, id]);
 };
 
+const deleteListing = (id) => {
+  const query = `
+  DELETE FROM "listing"
+  WHERE listing.id = $1;`;
+  return pool.query(query, [id]);
+};
+
 module.exports = {
   createListing,
   getListing,
@@ -80,4 +87,5 @@ module.exports = {
   getImages,
   getListings,
   updateListing,
+  deleteListing
 }

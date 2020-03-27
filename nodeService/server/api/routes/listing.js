@@ -6,6 +6,7 @@ const {
   insertImage,
   getListings,
   updateListing,
+  deleteListing,
 } = require('../../db/queries/listing');
 
 const listingRouter = new Router({ prefix: '/listing' });
@@ -125,7 +126,20 @@ listingRouter.patch('/:id', async (ctx) => {
     })
     .catch((err) => {
       console.error(err);
-      ctx.body = "Post not found"
+      ctx.body = "Post not found";
+    })
+});
+
+listingRouter.delete('/:id', async (ctx) => {
+  const { id } = ctx.params
+  await deleteListing(id)
+    .then((images) => {
+      console.log('Successfully deleted listing');
+      ctx.body = images;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "Error deleting listing"
     })
 });
 
