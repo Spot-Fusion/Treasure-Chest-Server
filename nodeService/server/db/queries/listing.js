@@ -33,7 +33,7 @@ const getImages = (id_listing) => {
 
 const getListing = (id) => {
   const query = `
-  SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
+  SELECT listing.id, account.name as seller, listing.id_seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
   FROM "listing", "account", "category" 
   WHERE listing.id = $1 
   AND listing.id_seller = account.id 
@@ -73,6 +73,13 @@ const updateListing = (name, description, price, zipcode, negotiable, id) => {
   return pool.query(query, [name, description, price, zipcode, negotiable, id]);
 };
 
+const deleteListing = (id) => {
+  const query = `
+  DELETE FROM "listing"
+  WHERE listing.id = $1;`;
+  return pool.query(query, [id]);
+};
+
 module.exports = {
   createListing,
   getListing,
@@ -80,4 +87,5 @@ module.exports = {
   getImages,
   getListings,
   updateListing,
+  deleteListing
 }
