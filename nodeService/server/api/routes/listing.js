@@ -68,7 +68,7 @@ listingRouter.get('/:id', async (ctx) => {
 // Get images by id
 listingRouter.get('/:id/images', async (ctx) => {
   const { id } = ctx.params
-  await getListings(id)
+  await getImages(id)
     .then((images) => {
       console.log('Successfully got images');
       ctx.body = images;
@@ -79,17 +79,18 @@ listingRouter.get('/:id/images', async (ctx) => {
     })
 });
 
-
-listingRouter.get('/:id/images', async (ctx) => {
-  const { id } = ctx.params
-  await getListings(id)
+// insert image
+listingRouter.post('/:id_listing', async (ctx) => {
+  const { id_listing } = ctx.params;
+  const { image } = ctx.request.body;
+  await insertImage(id_listing, image)
     .then((images) => {
-      console.log('Successfully got images');
+      console.log('Successfully created image');
       ctx.body = images;
     })
     .catch((err) => {
       console.error(err);
-      ctx.body = "No images found"
+      ctx.body = "Image not posted"
     })
 });
 
