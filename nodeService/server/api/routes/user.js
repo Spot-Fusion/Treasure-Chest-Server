@@ -53,13 +53,14 @@ userRouter.get('/id/:id', async (ctx) => {
 });
 
 // Update profile
-userRouter.patch('/update/:id', async (ctx) => {
+userRouter.post('/update/:id', async (ctx) => {
   const { id } = ctx.params
   const { name, bio, icon } = ctx.request.body
   await editUser(name, bio, icon, id)
-    .then((a) => {
-      console.log(a);
-      ctx.body = 'Successfully updated user';
+    .then((user) => {
+      console.log('Successfully updated user');
+      console.log(user);
+      ctx.body = user;
     })
     .catch((err) => {
       console.error(err);
