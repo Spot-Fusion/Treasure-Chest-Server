@@ -35,23 +35,6 @@ listingRouter.post('/', async (ctx) => {
     })
 });
 
-// Insert image
-listingRouter.post('/images', async (ctx) => {
-  const { 
-    id_listing,
-    image,
-   } = ctx.body
-  await getListings(id_listing, image)
-    .then((images) => {
-      console.log('Successfully got images');
-      ctx.body = images;
-    })
-    .catch((err) => {
-      console.error(err);
-      ctx.body = "No images found"
-    })
-});
-
 // Get listing by id
 listingRouter.get('/:id', async (ctx) => {
   const { id } = ctx.params
@@ -63,6 +46,20 @@ listingRouter.get('/:id', async (ctx) => {
     .catch((err) => {
       console.error(err);
       ctx.body = "Post not found"
+    })
+});
+
+// Get listings by category
+listingRouter.get('/', async (ctx) => {
+  let category = ctx.request.body.category || '';
+  await getListings(category)
+    .then((posts) => {
+      console.log('Successfully got posts');
+      ctx.body = posts;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "Posts not found"
     })
 });
 
@@ -92,20 +89,6 @@ listingRouter.post('/:id_listing', async (ctx) => {
     .catch((err) => {
       console.error(err);
       ctx.body = "Image not posted"
-    })
-});
-
-// Get listings by category
-listingRouter.get('/', async (ctx) => {
-  let category = ctx.request.body.category || '';
-  await getListings(category)
-    .then((posts) => {
-      console.log('Successfully got posts');
-      ctx.body = posts;
-    })
-    .catch((err) => {
-      console.error(err);
-      ctx.body = "Posts not found"
     })
 });
 
