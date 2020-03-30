@@ -46,20 +46,22 @@ const getListings = (category) => {
   if (category) {
     console.log('Category');
     const query = `
-    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
-    FROM "listing", "account", "category"
+    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+    FROM "listing", "account", "category", "image"
     WHERE category.name = $1
     AND listing.id_seller = account.id 
-    AND listing.id_category = category.id;`;
+    AND listing.id_category = category.id
+    AND listing.id = image.id_listing;`;
     return pool.query(query, [category])
       .then((listing) => listing.rows);
   } else {
     console.log('No category');
     const query = `
-    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
-    FROM "listing", "account", "category"
+    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+    FROM "listing", "account", "category", "image"
     WHERE listing.id_seller = account.id 
-    AND listing.id_category = category.id;`;
+    AND listing.id_category = category.id
+    AND listing.id = image.id_listing;`;
     return pool.query(query)
       .then((listing) => listing.rows);
   }
