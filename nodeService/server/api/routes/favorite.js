@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const {
   favorite,
+  isFavorite,
   getFavorites,
   unFavorite,
 } = require('../../db/queries/favorite');
@@ -17,6 +18,23 @@ favoriteRouter.post('/:id_user/:id_listing', async (ctx) => {
   await favorite(id_user, id_listing)
     .then(() => {
       ctx.body = 'Successfully favorited listing';
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.response.status = 500;
+    });
+});
+
+// get user favorite
+favoriteRouter.get('/:id_user/:id_listing', async (ctx) => {
+  const {
+    id_user,
+    id_listing
+  } = ctx.params;
+
+  await isFavorite(id_user, id_listing)
+    .then((isFavorited) => {
+      ctx.body = isFavorited;
     })
     .catch((err) => {
       console.error(err);
