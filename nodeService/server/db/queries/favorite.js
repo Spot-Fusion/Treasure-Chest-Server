@@ -8,6 +8,16 @@ const favorite = (id_user, id_listing) => {
   return pool.query(query, [id_user, id_listing]);
 };
 
+const isFavorite = (id_user, id_listing) => {
+  const query = `
+  SELECT * FROM
+  "selection"
+  WHERE id_user = $1
+  AND id_listing = $2;`;
+  return pool.query(query, [id_user, id_listing])
+  .then((listing) => !!listing.rows.length);
+};
+
 const getFavorites = (id) => {
   const query = `
   SELECT listing.id as id_listing, listing.name, listing.created_at, listing.price, listing.archived, image.image
@@ -30,7 +40,7 @@ const unFavorite = (id_user, id_listing) => {
 
 module.exports = {
   favorite,
+  isFavorite,
   getFavorites,
   unFavorite
-  
 }
