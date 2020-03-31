@@ -75,6 +75,14 @@ const updateListing = (name, description, price, zipcode, negotiable, id) => {
   return pool.query(query, [name, description, price, zipcode, negotiable, id]);
 };
 
+const archiveListing = (id) => {
+  const query = `
+  UPDATE "listing"
+  SET archived = 1
+  WHERE id = $1;`;
+  return pool.query(query, [id]);
+};
+
 const deleteListing = (id) => {
   const query = `
   DELETE FROM "listing"
@@ -89,5 +97,6 @@ module.exports = {
   getImages,
   getListings,
   updateListing,
+  archiveListing,
   deleteListing
 }

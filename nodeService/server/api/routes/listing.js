@@ -6,6 +6,7 @@ const {
   insertImage,
   getListings,
   updateListing,
+  archiveListing,
   deleteListing,
 } = require('../../db/queries/listing');
 
@@ -93,7 +94,7 @@ listingRouter.post('/:id_listing', async (ctx) => {
 });
 
 // Update listing
-listingRouter.patch('/:id', async (ctx) => {
+listingRouter.patch('/update/:id', async (ctx) => {
   const { id } = ctx.params
   const {
     name,
@@ -109,7 +110,21 @@ listingRouter.patch('/:id', async (ctx) => {
     })
     .catch((err) => {
       console.error(err);
-      ctx.body = "Post not found";
+      ctx.body = "Error updating post";
+    })
+});
+
+// Update listing
+listingRouter.patch('/archive/:id', async (ctx) => {
+  const { id } = ctx.params
+  await archiveListing(id)
+    .then((post) => {
+      console.log('Successfully archived post');
+      ctx.body = post;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "Error archiving post";
     })
 });
 
