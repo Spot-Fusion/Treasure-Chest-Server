@@ -67,6 +67,20 @@ const getListings = (category) => {
   }
 };
 
+
+const getUserListings = (id, archived) => {
+  const query = `
+  SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+  FROM "listing", "account", "category", "image"
+  WHERE listing.id_seller = $1
+  AND listing.archived = $2
+  AND listing.id_seller = account.id 
+  AND listing.id_category = category.id
+  AND listing.id = image.id_listing;`;
+  return pool.query(query, [id, archived])
+    .then((listing) => listing.rows);
+};
+
 const updateListing = (name, description, price, zipcode, negotiable, id) => {
   const query = `
   UPDATE "listing"
@@ -96,6 +110,7 @@ module.exports = {
   insertImage,
   getImages,
   getListings,
+  getUserListings,
   updateListing,
   archiveListing,
   deleteListing

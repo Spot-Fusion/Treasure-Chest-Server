@@ -5,6 +5,7 @@ const {
   getImages,
   insertImage,
   getListings,
+  getUserListings,
   updateListing,
   archiveListing,
   deleteListing,
@@ -64,9 +65,23 @@ listingRouter.get('/', async (ctx) => {
     })
 });
 
+// Get listings by category
+listingRouter.get('/user/:id/:archived', async (ctx) => {
+  const { id, archived } = ctx.params;
+  await getUserListings(id, archived)
+    .then((posts) => {
+      console.log('Successfully got posts');
+      ctx.body = posts;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.body = "Posts not found";
+    })
+});
+
 // Get images by id
 listingRouter.get('/:id/images', async (ctx) => {
-  const { id } = ctx.params
+  const { id } = ctx.params;
   await getImages(id)
     .then((images) => {
       console.log('Successfully got images');
@@ -74,7 +89,7 @@ listingRouter.get('/:id/images', async (ctx) => {
     })
     .catch((err) => {
       console.error(err);
-      ctx.body = "No images found"
+      ctx.body = "No images found";
     })
 });
 
