@@ -64,6 +64,7 @@ favoriteRouter.delete('/:id_user/:id_listing', async (ctx) => {
   await unFavorite(id_user, id_listing)
     .then(() => {
       console.log('Successfully unfavorited');
+      ctx.body = 'Successfully unfavorited listing';
     })
     .catch((err) => {
       console.error(err);
