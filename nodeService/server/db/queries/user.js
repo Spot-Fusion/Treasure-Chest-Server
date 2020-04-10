@@ -5,7 +5,7 @@ const addUser = (name, bio, email, icon) => {
   INSERT INTO 
   "account" (name, bio, email, icon)
   VALUES ($1, $2, $3, $4)
-  RETURNING id;`;
+  RETURNING *;`;
   return pool.query(query, [name, bio, email, icon])
     .then((users) => users.rows[0]);
 };
