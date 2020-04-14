@@ -37,7 +37,7 @@ const getListing = (id) => {
   FROM "listing", "account", "category", "image"
   WHERE listing.id = $1 
   AND listing.id_seller = account.id 
-  AND listing.id_category = category.id;
+  AND listing.id_category = category.id
   AND listing.id = image.id_listing;`;
   return pool.query(query, [id])
     .then((listing) => listing.rows[0]);
