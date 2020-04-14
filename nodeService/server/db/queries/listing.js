@@ -52,7 +52,8 @@ const getListings = (category) => {
     WHERE category.name = $1
     AND listing.id_seller = account.id 
     AND listing.id_category = category.id
-    AND listing.id = image.id_listing;`;
+    AND listing.id = image.id_listing
+    ORDER BY listing.created_at DESC;`
     return pool.query(query, [category])
       .then((listing) => listing.rows);
   } else {
@@ -62,7 +63,8 @@ const getListings = (category) => {
     FROM "listing", "account", "category", "image"
     WHERE listing.id_seller = account.id 
     AND listing.id_category = category.id
-    AND listing.id = image.id_listing;`;
+    AND listing.id = image.id_listing
+    ORDER BY listing.created_at DESC;`;
     return pool.query(query)
       .then((listing) => listing.rows);
   }
