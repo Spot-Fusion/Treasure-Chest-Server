@@ -47,7 +47,7 @@ const getListings = (category) => {
   if (category) {
     console.log('Category');
     const query = `
-    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+    SELECT listing.id, listing.id_seller, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
     FROM "listing", "account", "category", "image"
     WHERE category.name = $1
     AND listing.id_seller = account.id 
@@ -58,7 +58,7 @@ const getListings = (category) => {
   } else {
     console.log('No category');
     const query = `
-    SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+    SELECT listing.id, listing.id_seller, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
     FROM "listing", "account", "category", "image"
     WHERE listing.id_seller = account.id 
     AND listing.id_category = category.id
