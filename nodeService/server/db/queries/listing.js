@@ -5,7 +5,7 @@ const createListing = (seller, category, name, description, price, zipcode, nego
   INSERT INTO 
   "listing" (id_seller, id_category, name, description, price, zipcode, negotiable, archived )
   VALUES ($1, $2, $3, $4, $5, $6, $7, 0)
-  RETURNING id;`;
+  RETURNING *;`;
 
   return pool.query(query, [seller, category, name, description, price, zipcode, negotiable])
     .then((listing) => listing.rows[0].id);;
@@ -16,7 +16,7 @@ const insertImage = (id_listing, image) => {
   INSERT INTO 
   "image" (id_listing, image)
   VALUES ($1, $2)
-  RETURNING id;`;
+  RETURNING *;`;
 
   return pool.query(query, [id_listing, image])
     .then((listing) => listing.rows[0].id);
@@ -37,7 +37,7 @@ const getListing = (id) => {
   FROM "listing", "account", "category", "image"
   WHERE listing.id = $1 
   AND listing.id_seller = account.id 
-  AND listing.id_category = category.id;
+  AND listing.id_category = category.id
   AND listing.id = image.id_listing;`;
   return pool.query(query, [id])
     .then((listing) => listing.rows[0]);
