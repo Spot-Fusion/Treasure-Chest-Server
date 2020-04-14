@@ -33,11 +33,12 @@ const getImages = (id_listing) => {
 
 const getListing = (id) => {
   const query = `
-  SELECT listing.id, account.name as seller, listing.id_seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived 
-  FROM "listing", "account", "category" 
+  SELECT listing.id, account.name as seller, listing.id_seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+  FROM "listing", "account", "category", "image"
   WHERE listing.id = $1 
   AND listing.id_seller = account.id 
-  AND listing.id_category = category.id;`;
+  AND listing.id_category = category.id;
+  AND listing.id = image.id_listing;`;
   return pool.query(query, [id])
     .then((listing) => listing.rows[0]);
 };
