@@ -1,19 +1,23 @@
 const Router = require('koa-router');
 
+const messageRouter = new Router({ prefix: '/message' });
+
 const {
   sendMessage,
   getUsers,
   getMessages
 } = require('../../db/queries/message');
 
-const messageRouter = new Router({ prefix: '/message' });
-
+require('dotenv').config();
+const client = require('twilio')(
+  process.env.TWILIO_ACCOUT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 // Send message
 messageRouter.post('/:id_sender/:id_recipient', async (ctx) => {
   const { id_sender, id_recipient } = ctx.params
   const { text } = ctx.request.body
-console.log(ctx.params)
   await sendMessage(id_sender, id_recipient, text)
     .then(() => {
       ctx.body = 'Message sent!';
@@ -31,7 +35,7 @@ messageRouter.get('/users/:id', async (ctx) => {
   await getUsers(id)
     .then((users) => {
       console.log('Successfully got messaged users');
-      ctx.body = users;
+      ctx.body = { success: true };
     })
     .catch((err) => {
       console.error(err);
@@ -42,7 +46,6 @@ messageRouter.get('/users/:id', async (ctx) => {
 // Get all messages between 2 users
 messageRouter.get('/:id_sender/:id_recipient', async (ctx) => {
   const { id_sender, id_recipient } = ctx.params
-  console.log(ctx.params)
   await getMessages(id_sender, id_recipient)
     .then((messages) => {
       ctx.body = messages;
@@ -51,6 +54,27 @@ messageRouter.get('/:id_sender/:id_recipient', async (ctx) => {
       console.error(err);
       ctx.response.status = 500;
     })
+});
+
+// Twilio Route
+messageRouter.post('/twilio', async (ctx) => {
+  console.log('twilio');
+  ctx.set('Content-Type', 'application/json');
+  client.messages
+    .create({
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: ctx.request.body.to,
+      body: ctx.request.body.body
+    })
+    .then(() => {
+      // res.send(JSON.stringify({ success: true }));
+      ctx.body = { success: true }
+    })
+    .catch(err => {
+      console.log(err);
+      // res.send(JSON.stringify({ success: false }));
+      ctx.body = { success: false };
+    });
 });
 
 module.exports.messageRouter = messageRouter;
