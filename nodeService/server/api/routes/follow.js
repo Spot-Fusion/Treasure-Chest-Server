@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const {
   follow,
+  isFollowing,
   getFollowing,
   getFollowingCount,
   getFollowers,
@@ -21,6 +22,23 @@ followRouter.post('/:id_user/:id_following', async (ctx) => {
   await follow(id_user, id_following)
     .then(() => {
       ctx.body = 'Successfully followed user';
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.response.status = 500;
+    })
+});
+
+// get if a user is following someone
+followRouter.get('/:id_user/:id_following', async (ctx) => {
+  const {
+    id_user,
+    id_following
+  } = ctx.params
+
+  await isFollowing(id_user, id_following)
+    .then((is_following) => {
+      ctx.body = is_following
     })
     .catch((err) => {
       console.error(err);
@@ -89,6 +107,7 @@ followRouter.delete('/:id_user/:id_following', async (ctx) => {
   await stopFollowing(id_user, id_following)
     .then(() => {
       console.log('Successfully stopped following user');
+      ctx.response.status = 204;
     })
     .catch((err) => {
       console.error(err);
