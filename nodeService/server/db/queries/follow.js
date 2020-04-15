@@ -19,6 +19,17 @@ const getFollowing = (id) => {
     .then((listing) => listing.rows );
 };
 
+const getFollowingCount = (id) => {
+  const query = `
+  SELECT COUNT(*)
+  FROM "account", "selection"
+  WHERE selection.id_user = $1 
+  AND selection.id_following = account.id
+  AND selection.id_following IS NOT NULL;`;
+  return pool.query(query, [id])
+    .then((listing) => listing.rows[0].count);
+};
+
 const getFollowers = (id) => {
   const query = `
   SELECT account.id, account.name, account.icon
@@ -28,6 +39,17 @@ const getFollowers = (id) => {
   AND selection.id_following IS NOT NULL;`;
   return pool.query(query, [id])
     .then((listing) => listing.rows);
+};
+
+const getFollowersCount = (id) => {
+  const query = `
+  SELECT COUNT(*)
+  FROM "account", "selection"
+  WHERE selection.id_following = $1 
+  AND selection.id_user = account.id
+  AND selection.id_following IS NOT NULL;`;
+  return pool.query(query, [id])
+    .then((listing) => listing.rows[0].count);
 };
 
 const stopFollowing = (id_user, id_following) => {
@@ -41,6 +63,8 @@ const stopFollowing = (id_user, id_following) => {
 module.exports = {
   follow,
   getFollowing,
+  getFollowingCount,
   getFollowers,
+  getFollowersCount,
   stopFollowing
 }

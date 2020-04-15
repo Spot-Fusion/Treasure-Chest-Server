@@ -2,7 +2,9 @@ const Router = require('koa-router');
 const {
   follow,
   getFollowing,
+  getFollowingCount,
   getFollowers,
+  getFollowersCount,
   stopFollowing
 } = require('../../db/queries/follow');
 
@@ -40,6 +42,20 @@ followRouter.get('/following/:id', async (ctx) => {
     })
 });
 
+// get number of users that an account is following
+followRouter.get('/following/count/:id', async (ctx) => {
+  const { id } = ctx.params
+  await getFollowingCount(id)
+    .then((users) => {
+      console.log('Successfully got following users');
+      ctx.body = users;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.response.status = 500;
+    })
+});
+
 // Get users that an account is followed by
 followRouter.get('/followed_by/:id', async (ctx) => {
   const { id } = ctx.params
@@ -54,6 +70,19 @@ followRouter.get('/followed_by/:id', async (ctx) => {
     })
 });
 
+// Get number of users that an account is followed by
+followRouter.get('/followed_by/count/:id', async (ctx) => {
+  const { id } = ctx.params
+  await getFollowersCount(id)
+    .then((users) => {
+      console.log('Successfully got following users count');
+      ctx.body = users;
+    })
+    .catch((err) => {
+      console.error(err);
+      ctx.response.status = 500;
+    })
+});
 // Stop following another user
 followRouter.delete('/:id_user/:id_following', async (ctx) => {
   const { id_user, id_following } = ctx.params
