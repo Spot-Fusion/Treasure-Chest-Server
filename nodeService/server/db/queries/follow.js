@@ -8,6 +8,16 @@ const follow = (id_user, id_following) => {
   return pool.query(query, [id_user, id_following]);
 };
 
+const isFollowing = (id_user, id_following) => {
+  const query = `
+  SELECT * FROM
+  "selection"
+  WHERE id_user = $1
+  AND id_following = $2;`;
+  return pool.query(query, [id_user, id_following])
+    .then((listing) => !!listing.rows.length);
+};
+
 const getFollowing = (id) => {
   const query = `
   SELECT account.id, account.name, account.icon
@@ -62,6 +72,7 @@ const stopFollowing = (id_user, id_following) => {
 
 module.exports = {
   follow,
+  isFollowing,
   getFollowing,
   getFollowingCount,
   getFollowers,
