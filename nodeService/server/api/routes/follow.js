@@ -30,7 +30,7 @@ followRouter.post('/:id_user/:id_following', async (ctx) => {
 });
 
 // get if a user is following someone
-followRouter.get('/:id_user/:id_following', async (ctx) => {
+followRouter.get('/isFollowing/:id_user/:id_following', async (ctx) => {
   const {
     id_user,
     id_following
