@@ -1,6 +1,10 @@
 const Router = require('koa-router');
 
-const messageRouter = new Router({ prefix: '/message' });
+require('dotenv').config();
+const client = require('twilio')(
+  process.env.TWILIO_ACCOUT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 const {
   sendMessage,
@@ -8,11 +12,7 @@ const {
   getMessages
 } = require('../../db/queries/message');
 
-require('dotenv').config();
-const client = require('twilio')(
-  process.env.TWILIO_ACCOUT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+const messageRouter = new Router({ prefix: '/message' });
 
 // Send message
 messageRouter.post('/:id_sender/:id_recipient', async (ctx) => {
@@ -35,7 +35,7 @@ messageRouter.get('/users/:id', async (ctx) => {
   await getUsers(id)
     .then((users) => {
       console.log('Successfully got messaged users');
-      ctx.body = { success: true };
+      ctx.body = users;
     })
     .catch((err) => {
       console.error(err);
@@ -67,12 +67,10 @@ messageRouter.post('/twilio', async (ctx) => {
       body: ctx.request.body.body
     })
     .then(() => {
-      // res.send(JSON.stringify({ success: true }));
       ctx.body = { success: true }
     })
     .catch(err => {
       console.log(err);
-      // res.send(JSON.stringify({ success: false }));
       ctx.body = { success: false };
     });
 });
