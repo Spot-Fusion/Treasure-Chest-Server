@@ -20,7 +20,7 @@ const isFavorite = (id_user, id_listing) => {
 
 const getFavorites = (id) => {
   const query = `
-  SELECT listing.id as id_listing, listing.name, listing.created_at, listing.price, listing.archived, image.image
+  SELECT listing.id as id_listing, listing.name, listing.id_seller, listing.created_at, listing.price, listing.archived, image.image
   FROM "listing", "selection", "image"
   WHERE selection.id_user = $1 
   AND selection.id_listing = listing.id
