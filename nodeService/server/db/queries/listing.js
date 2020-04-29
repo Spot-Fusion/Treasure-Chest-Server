@@ -73,7 +73,7 @@ const getListings = (category) => {
 
 const getUserListings = (id, archived) => {
   const query = `
-  SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image
+  SELECT listing.id, account.name as seller, category.name as category, listing.created_at, listing.name, listing.description, listing.price, listing.zipcode, listing.negotiable, listing.archived, image.image, listing.id_seller
   FROM "listing", "account", "category", "image"
   WHERE listing.id_seller = $1
   AND listing.archived = $2
