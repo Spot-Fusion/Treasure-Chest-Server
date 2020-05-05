@@ -68,6 +68,7 @@ messageRouter.post('/twilio', async (ctx) => {
     })
     .then(() => {
       ctx.body = { success: true }
+      ctx.response.status = 201;
     })
     .catch(err => {
       console.log(err);
