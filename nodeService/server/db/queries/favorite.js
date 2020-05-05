@@ -25,7 +25,8 @@ const getFavorites = (id) => {
   WHERE selection.id_user = $1 
   AND selection.id_listing = listing.id
   AND listing.id = image.id_listing
-  AND selection.id_listing IS NOT NULL;`;
+  AND selection.id_listing IS NOT NULL
+  ORDER BY listing.created_at DESC;`;
   return pool.query(query, [id])
     .then((listing) => listing.rows);
 };
