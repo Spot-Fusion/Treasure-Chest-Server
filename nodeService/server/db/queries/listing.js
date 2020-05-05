@@ -79,7 +79,8 @@ const getUserListings = (id, archived) => {
   AND listing.archived = $2
   AND listing.id_seller = account.id 
   AND listing.id_category = category.id
-  AND listing.id = image.id_listing;`;
+  AND listing.id = image.id_listing
+  ORDER BY listing.created_at DESC;`;
   return pool.query(query, [id, archived])
     .then((listing) => listing.rows);
 };
